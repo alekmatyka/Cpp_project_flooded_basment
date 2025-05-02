@@ -48,7 +48,10 @@ void Game::Update_game_screen(){
         std::cout<<current_level<<'\n';
         startNewGrid();
         break;
-    
+    case GAME_LOST:
+        current_screen=GAMEOVER_SCREEN;
+        current_level=0;
+        break;
     default:
         break;
     }

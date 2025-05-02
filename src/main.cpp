@@ -9,7 +9,7 @@ int main()
 {
     
     constexpr int screenWidth = 1200;
-    constexpr int screenHeight = 960;
+    constexpr int screenHeight = 960; 
     
     
     InitWindow(screenWidth, screenHeight, "Zalana Piwnica!");
