@@ -1,7 +1,7 @@
 #pragma once
 #include <raylib.h>
 #include "grid.h"
-
+#include "raygui.h"
 
 enum GameScreen{
     HOME_SCREEN,

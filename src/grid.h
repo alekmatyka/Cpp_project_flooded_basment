@@ -26,6 +26,12 @@ private:
 
     void calculateStartPosition();
     void DrawGrid();
+
+    void flipClockwise();
+    void flipCounterClockwise();
+
+    void flipEntity(Entity* e,bool clockwise);
+
 public:
     Grid();
     Grid(double diff);
