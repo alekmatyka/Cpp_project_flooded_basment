@@ -25,7 +25,7 @@ private:
     void Update_gameover_screen();
     void startNewGrid();
 
-    bool gameOver;
+    bool gameOver=false;
 public:
     Game();
     Game(GameScreen screen);

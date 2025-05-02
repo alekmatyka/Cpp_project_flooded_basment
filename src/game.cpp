@@ -3,7 +3,7 @@
 #include "grid.h"
 
 
-Game::Game():current_screen(HOME_SCREEN),gameOver(false),difficulty_level(1),current_level(0){
+Game::Game():difficulty_level(1),current_level(0),current_screen(HOME_SCREEN),gameOver(false){
     grid = new Grid;
 }
 
@@ -39,6 +39,7 @@ void Game::Loop(){
 
 void Game::Update_game_screen(){
     if(IsKeyPressed(KEY_SPACE)) current_screen=GAMEOVER_SCREEN;
+    grid->Update();
 }
 void Game::Update_home_screen(){
     if(IsKeyPressed(KEY_SPACE)) startNewGrid();

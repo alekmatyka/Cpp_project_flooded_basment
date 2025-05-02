@@ -2,6 +2,7 @@
 #include <raylib.h>
 #include <random>
 #include "entity.h"
+#include <iostream>
 
 
 
@@ -30,7 +31,7 @@ Grid::Grid(int h, int w,double diff):height(h),width(w),difficulty(diff),player(
     outline.height = 3*cell_width;
 }
 
-Grid::Grid(double diff):Grid(10,10,diff){}
+Grid::Grid(double diff):Grid(10,20,diff){}
 
 Grid::Grid():Grid(1.0){}
 
@@ -79,8 +80,10 @@ void Grid::DrawGrid(){
             }else{
                 color=BLACK;
             }
-            DrawRectangle(i*cell_width+startX,j*cell_width+startY,cell_width,cell_width,color);
+            DrawRectangle(j*cell_width+startX,i*cell_width+startY,cell_width,cell_width,color);
+            // std::cout<<grid[i][j];
         }
+        // std::cout<<'\n';
     }
     DrawRectangle((height-1)*cell_width+startX,(width-1)*cell_width+startY,cell_width,cell_width,GREEN);
 }
@@ -95,4 +98,21 @@ void Grid::Update(){
     //logika zakonczenia
 
     //logika ruchu
+    switch (GetKeyPressed())
+    {
+    case KEY_RIGHT:
+        if(player.getX()<width-1 && grid[player.getY()][player.getX()+1]==0) player.move(KEY_RIGHT);
+        break;
+    case KEY_LEFT:
+        if(player.getX()>0 && grid[player.getY()][player.getX()-1]==0) player.move(KEY_LEFT);
+        break;
+    case KEY_DOWN:
+        if(player.getY()<height-1 && grid[player.getY()+1][player.getX()]==0) player.move(KEY_DOWN);
+        break;
+    case KEY_UP:
+        if(player.getY()>0 && grid[player.getY()-1][player.getX()]==0) player.move(KEY_UP);
+        break;
+    default:
+        break;
+    }
 }
