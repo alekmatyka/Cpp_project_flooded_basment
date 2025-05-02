@@ -19,7 +19,10 @@ private:
     int startX,startY;
     int turn_x=1;
     int turn_y=1;
-    float outline_width = 3.5f;        
+    float outline_width = 3.5f; 
+    
+    GameStatus status = GAME_RUNNING;
+
     Rectangle outline;
 
     Entity player;
@@ -39,6 +42,7 @@ public:
     ~Grid();
     void Draw();
     void Update();
+    GameStatus getGameStatus();
 };
 
 

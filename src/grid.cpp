@@ -85,7 +85,10 @@ void Grid::DrawGrid(){
         }
         // std::cout<<'\n';
     }
-    DrawRectangle((height-1)*cell_width+startX,(width-1)*cell_width+startY,cell_width,cell_width,GREEN);
+    if(grid[height-1][width-1]==0) 
+        DrawRectangle((width-1)*cell_width+startX,(height-1)*cell_width+startY,cell_width,cell_width,GREEN);
+    else
+        DrawRectangle((width-1)*cell_width+startX,(height-1)*cell_width+startY,cell_width,cell_width,ORANGE);
 }
 
 void Grid::Draw(){
@@ -96,6 +99,7 @@ void Grid::Draw(){
 
 void Grid::Update(){
     //logika zakonczenia
+    if(player.getX()==width-1 && player.getY()==height-1) status = GAME_WON;
 
     //logika ruchu
     switch (GetKeyPressed())
@@ -186,4 +190,8 @@ void Grid::flipEntity(Entity* e,bool clockwise){
     }
 
     e->setPos(turn_x+newRelX,turn_y+newRelY);
+}
+
+GameStatus Grid::getGameStatus(){
+    return status;
 }
