@@ -14,6 +14,7 @@ class Game
 private:
     int difficulty_level;
     int current_level;
+    int highscore;
     GameScreen current_screen;
     Grid *grid;
     

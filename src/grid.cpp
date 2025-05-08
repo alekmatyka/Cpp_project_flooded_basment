@@ -14,6 +14,8 @@ Grid::Grid(int h, int w,double diff):height(h),width(w),difficulty(diff),player(
         grid[i] = new int[width]();
     }
 
+    // std::cout<<difficulty<<'\n';
+
     std::random_device rd;                     
     std::mt19937 gen(rd());                     
     std::uniform_int_distribution<> dist(0, 1);

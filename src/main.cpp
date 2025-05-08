@@ -16,6 +16,10 @@ int main()
     SetTargetFPS(60);
     Game game;
 
+    Font customFont = LoadFontEx("./assets/ComicMono.ttf", 82, 0, 0);
+    GuiSetFont(customFont);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
+
     while (!WindowShouldClose())
     {        
         BeginDrawing();
@@ -23,6 +27,7 @@ int main()
             DrawLine(0,screenHeight/4,screenWidth,screenHeight/4,BLACK);
         EndDrawing();
     }
-    
+
+    UnloadFont(customFont);
     CloseWindow();
 }

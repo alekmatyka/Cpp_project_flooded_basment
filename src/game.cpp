@@ -2,9 +2,10 @@
 #include <raylib.h>
 #include "grid.h"
 #include <iostream>
+#include <random>
 
 
-Game::Game():difficulty_level(1),current_level(0),current_screen(HOME_SCREEN),gameOver(false){
+Game::Game():difficulty_level(1),current_level(0),highscore(0),current_screen(HOME_SCREEN),gameOver(false){
     grid = new Grid;
 }
 
@@ -58,10 +59,28 @@ void Game::Update_game_screen(){
 
 }
 void Game::Update_home_screen(){
+    GuiSetStyle(BUTTON, TEXT_SIZE, 40);
     if(IsKeyPressed(KEY_SPACE)) startNewGrid();
+    if(GuiButton((Rectangle){ 600-120, 300, 2*120, 100 }, "Easy")){
+        difficulty_level=1;
+        startNewGrid();
+    }
+    if(GuiButton((Rectangle){ 600-120, 300+150, 2*120, 100 }, "Hard")){
+        difficulty_level=2;
+        startNewGrid();
+    }
 }
 void Game::Update_gameover_screen(){
-    if(IsKeyPressed(KEY_SPACE)) current_screen=HOME_SCREEN;
+    if(IsKeyPressed(KEY_SPACE) || GuiButton((Rectangle){ 600-120, 300, 2*120, 100 }, "Menu Glowne")){
+        current_screen=HOME_SCREEN;
+        if(current_level>highscore) highscore=current_level;
+        current_level=0;
+    }
+    if(GuiButton((Rectangle){ 600-120, 300+150, 2*120, 100 }, "Zagraj Ponownie")){
+        if(current_level>highscore) highscore=current_level;
+        current_level=0;
+        startNewGrid();
+    }
 }
 
 void Game::Draw_game_screen(){
@@ -75,12 +94,24 @@ void Game::Draw_home_screen(){
     DrawText("Menu",10,10,20,BLACK);
 }
 void Game::Draw_gameover_screen(){
-    ClearBackground(BLUE);
+    ClearBackground(LIGHTGRAY);
     DrawText("koniec",10,10,20,BLACK);
+    std::string score = "Wynik: "+ std::to_string(current_level);
+    std::string hscore = "Highscore: "+ std::to_string(highscore);
+    GuiLabel((Rectangle){ 600-120, 50, 2*120, 100 }, score.c_str());
+    GuiLabel((Rectangle){ 600-120, 150, 2*120, 100 }, hscore.c_str());
 }
 
 void Game::startNewGrid(){
+    std::random_device rd;                     
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> disth(10, 25);
+    std::uniform_int_distribution<> distw(15, 35);
+    int h = disth(gen);
+    int w = distw(gen);
+    double diff = difficulty_level + (double)current_level/10;
+    // std::cout<<"hallo "<<diff<<" "<<(double)current_level/10<<'\n';
     delete grid;
-    grid = new Grid;
+    grid = new Grid(h,w,diff);
     current_screen = GAME_SCRREN;
 }
