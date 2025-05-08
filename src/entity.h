@@ -3,13 +3,13 @@
 
 class Entity
 {
-private:
+protected:
     int x;
     int y;
     Color color;
 public:
     Entity(int x_, int y_, Color col);
-    ~Entity();
+    virtual ~Entity();
 
     const int getX();
     const int getY();
@@ -19,7 +19,15 @@ public:
     void setPos(int x_,int y_);
     void move(int key);
 
-    void Draw(int cell_width, int startX, int startY);
+    virtual void Draw(int cell_width, int startX, int startY);
+};
+
+class Drain:public Entity{
+
+    public:
+    Drain(int x_, int y_, Color col) : Entity(x_, y_, col) {}
+
+    void Draw(int cell_width, int startX, int startY) override; 
 };
 
 

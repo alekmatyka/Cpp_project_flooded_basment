@@ -87,11 +87,18 @@ void Game::Draw_game_screen(){
     ClearBackground(LIGHTGRAY);
     grid->Draw();
     DrawText("Gra",10,10,20,BLACK);
+    std::string score = "Wynik: "+ std::to_string(current_level);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 48);
+    GuiLabel((Rectangle){ 600-120, 100, 400, 100 }, score.c_str());
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
 
 }
 void Game::Draw_home_screen(){
     ClearBackground(GREEN);
     DrawText("Menu",10,10,20,BLACK);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 96);
+    GuiLabel((Rectangle){ 240, 50, 960, 100 }, "Zalana Piwnica!");
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
 }
 void Game::Draw_gameover_screen(){
     ClearBackground(LIGHTGRAY);

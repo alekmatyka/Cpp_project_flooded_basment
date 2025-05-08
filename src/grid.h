@@ -42,6 +42,8 @@ private:
     bool YoMamaVertical=false;
     int YoMamaDirection = 1;
 
+    std::vector<Drain> drains;
+
     void calculateStartPosition();
     void DrawGrid();
 
@@ -52,10 +54,12 @@ private:
     void spawnWater();
     void spawnYoMama();
     void spawnSupportingColumns();
+    void spawnDrains();
 
     void updateEntites();
     void updateWater();
     void updateYoMama();
+    void updateDrains();
 
     bool checkPlayerCollison();
     bool canEntityMoveTo(int x, int y);

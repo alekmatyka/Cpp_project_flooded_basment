@@ -18,7 +18,7 @@ int main()
 
     Font customFont = LoadFontEx("./assets/ComicMono.ttf", 82, 0, 0);
     GuiSetFont(customFont);
-    GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 36);
 
     while (!WindowShouldClose())
     {        

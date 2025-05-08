@@ -39,7 +39,7 @@ Grid::Grid(int h, int w,double diff):height(h),width(w),difficulty(diff),player(
     outline.height = 3*cell_width;
 
     waterCycleOutline.x = startX;
-    waterCycleOutline.y = startY-cell_width*2;
+    waterCycleOutline.y = std::max(startY-cell_width*2,GetScreenHeight()/4);
     waterCycleOutline.width = cell_width*width;
     waterCycleOutline.height = cell_width;
 
@@ -49,6 +49,8 @@ Grid::Grid(int h, int w,double diff):height(h),width(w),difficulty(diff),player(
     spawnYoMama();
     //spawn scian nosnych
     spawnSupportingColumns();
+    //spawn studzienek
+    spawnDrains();
 
 }
 
@@ -119,6 +121,7 @@ void Grid::DrawGrid(){
 
 void Grid::Draw(){
     DrawGrid();
+    for(Drain& d:drains) d.Draw(cell_width,startX,startY);
     player.Draw(cell_width,startX,startY);
     if(YoMamaActive)
         YoMamaYoMama->Draw(cell_width,startX,startY);
@@ -288,7 +291,11 @@ void Grid::updateEntites(){
     turn++;
     //update wody
     if(turn%waterCycleLength==0)
+    {
         updateWater();
+        updateDrains();
+    }
+        
     if(YoMamaActive)
         updateYoMama();
 
@@ -351,7 +358,7 @@ void Grid::updateYoMama(){
 }
 
 bool Grid::canEntityMoveTo(int y,int x){
-    return grid[y][x]!=1 && grid[y][x]!=4;
+    return grid[y][x]!=1 && grid[y][x]!=4 && x>=0 && x<width && y>=0 && y<height;
 }
 
 void Grid::spawnSupportingColumns(){
@@ -369,4 +376,39 @@ void Grid::spawnSupportingColumns(){
         grid[h][w]=4;
     }
 
+}
+
+
+void Grid::spawnDrains(){
+    std::random_device rd;                     
+    std::mt19937 gen(rd());                     
+    std::uniform_int_distribution<> dist(0, (int)(10/difficulty));
+    std::uniform_int_distribution<> distX(0, width-1);
+    std::uniform_int_distribution<> distY(0, height-1);
+
+    int drainCount = dist(gen);
+
+    for(int i=0;i<drainCount;i++){
+        int h = distX(gen);
+        int w = distY(gen);
+
+        Drain d(h,w,(Color){100,100,100,200});
+        drains.push_back(d);
+    }
+}
+
+
+void Grid::updateDrains(){
+    for(Drain& d:drains){
+        int x = d.getX();
+        int y = d.getY();
+        if(grid[y][x]==2){
+            //usuwamy wode w promieniu 5x5
+            for(int i =-2;i<3;i++){
+                for(int j=-2;j<3;j++){
+                    if(canEntityMoveTo(y+i,x+j) && grid[y+i][x+j]==2) grid[y+i][x+j]=0;
+                }
+            }
+        }
+    }
 }
