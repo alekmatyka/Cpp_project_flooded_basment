@@ -110,6 +110,7 @@ void Game::startNewGrid(){
     int h = disth(gen);
     int w = distw(gen);
     double diff = difficulty_level + (double)current_level/10;
+    diff = std::min(diff,4.0);
     // std::cout<<"hallo "<<diff<<" "<<(double)current_level/10<<'\n';
     delete grid;
     grid = new Grid(h,w,diff);
