@@ -1,6 +1,7 @@
 #pragma once
 #include "entity.h"
 #include <vector>
+#define YOMAMACOL (Color){ 255, 109, 194, 100 }
 
 enum GameStatus{
     GAME_RUNNING,
@@ -13,6 +14,13 @@ class Grid
 {
 private:
     int** grid;
+    /*
+    0 - puste miejsce
+    1 - sciana
+    2 - woda
+    3 - woda do zalania
+    4 - sciana nosna
+    */
     int height;
     int width;
     double difficulty;
@@ -43,12 +51,14 @@ private:
 
     void spawnWater();
     void spawnYoMama();
+    void spawnSupportingColumns();
 
     void updateEntites();
     void updateWater();
     void updateYoMama();
 
     bool checkPlayerCollison();
+    bool canEntityMoveTo(int x, int y);
 public:
     Grid();
     Grid(double diff);

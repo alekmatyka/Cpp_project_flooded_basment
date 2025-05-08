@@ -47,6 +47,8 @@ Grid::Grid(int h, int w,double diff):height(h),width(w),difficulty(diff),player(
     spawnWater();
     //spawn yomama
     spawnYoMama();
+    //spawn scian nosnych
+    spawnSupportingColumns();
 
 }
 
@@ -99,6 +101,8 @@ void Grid::DrawGrid(){
                 color=WHITE;
             }else if(grid[i][j]==1){
                 color=BLACK;
+            }else if(grid[i][j]==4){
+                color = BROWN;
             }else{
                 color=SKYBLUE;
             }
@@ -140,16 +144,16 @@ void Grid::Update(){
     {
     //ruch gracza
     case KEY_RIGHT:
-        if(player.getX()<width-1 && grid[player.getY()][player.getX()+1]!=1) player.move(KEY_RIGHT);
+        if(player.getX()<width-1 && canEntityMoveTo(player.getY(),player.getX()+1)) player.move(KEY_RIGHT);
         break;
     case KEY_LEFT:
-        if(player.getX()>0 && grid[player.getY()][player.getX()-1]!=1) player.move(KEY_LEFT);
+        if(player.getX()>0 && canEntityMoveTo(player.getY(),player.getX()-1)) player.move(KEY_LEFT);
         break;
     case KEY_DOWN:
-        if(player.getY()<height-1 && grid[player.getY()+1][player.getX()]!=1) player.move(KEY_DOWN);
+        if(player.getY()<height-1 && canEntityMoveTo(player.getY()+1,player.getX())) player.move(KEY_DOWN);
         break;
     case KEY_UP:
-        if(player.getY()>0 && grid[player.getY()-1][player.getX()]!=1) player.move(KEY_UP);
+        if(player.getY()>0 && canEntityMoveTo(player.getY()-1,player.getX())) player.move(KEY_UP);
         break;
     //ruch stolu obrotowego, nie updateujemy entities gdy tylko przesuwamy ramke
     case KEY_W:
@@ -194,8 +198,11 @@ void Grid::flipClockwise(){
     int temp[3][3];
 
     for (int i = -1; i <= 1; ++i)
-        for (int j = -1; j <= 1; ++j)
+        for (int j = -1; j <= 1; ++j){
+            if(grid[turn_y + j][turn_x + i]==4) return;
             temp[i+1][j+1] = grid[turn_y + j][turn_x + i];
+        }
+            
 
     for (int i = 0; i < 3; ++i)
         for (int j = 0; j < 3; ++j)
@@ -210,8 +217,10 @@ void Grid::flipCounterClockwise(){
 
     for (int i = -1; i <= 1; ++i)
         for (int j = -1; j <= 1; ++j)
+        {
+            if(grid[turn_y + j][turn_x + i]==4) return;
             temp[i+1][j+1] = grid[turn_y + j][turn_x + i];
-            
+        }
     for (int i = 0; i < 3; ++i)
         for (int j = 0; j < 3; ++j)
             grid[turn_y + 1 - i][turn_x - 1 + j] = temp[i][j];
@@ -315,10 +324,10 @@ void Grid::spawnYoMama(){
         if(rdist(gen)<0.5){//pionowo
             std::uniform_int_distribution<> dist(1,width-2);
             YoMamaVertical=true;
-            YoMamaYoMama = new Entity(dist(gen),0,PINK);
+            YoMamaYoMama = new Entity(dist(gen),0,YOMAMACOL);
         }else{
             std::uniform_int_distribution<> dist(1,height-2);
-            YoMamaYoMama = new Entity(0,dist(gen),PINK);
+            YoMamaYoMama = new Entity(0,dist(gen),YOMAMACOL);
         }
     }
 }
@@ -339,4 +348,25 @@ void Grid::updateYoMama(){
             else YoMamaYoMama -> move(KEY_LEFT);
         }
     }
+}
+
+bool Grid::canEntityMoveTo(int y,int x){
+    return grid[y][x]!=1 && grid[y][x]!=4;
+}
+
+void Grid::spawnSupportingColumns(){
+    std::random_device rd;                     
+    std::mt19937 gen(rd());                     
+    std::uniform_int_distribution<> dist((int)difficulty, 5+(int)difficulty);
+    std::uniform_int_distribution<> hdist(height/2-4,height/2+4);
+    std::uniform_int_distribution<> wdist(width/2-5,width/2+5);
+
+    int columCount = dist(gen);
+
+    for(int i=0;i<columCount;i++){
+        int h = hdist(gen);
+        int w = wdist(gen);
+        grid[h][w]=4;
+    }
+
 }

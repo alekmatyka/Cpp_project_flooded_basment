@@ -40,5 +40,5 @@ void Entity::setPos(int x_,int y_){
 }
 
 void Entity::Draw(int cell_width, int startX, int startY){
-    DrawRectangle(x*cell_width+startX,y*cell_width+startY,cell_width,cell_width,color);
+    DrawRectangle(x*cell_width+startX+2,y*cell_width+startY+2,cell_width-4,cell_width-4,color);
 }
