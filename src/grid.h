@@ -68,7 +68,8 @@ private:
 
 
     bool checkPlayerCollison();
-    bool canEntityMoveTo(int x, int y);
+    bool canEntityMoveTo(int y, int x);
+    bool inBounds(int y,int x);
 public:
     Grid();
     Grid(double diff);

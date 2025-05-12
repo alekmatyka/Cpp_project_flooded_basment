@@ -3,8 +3,10 @@
 #include <random>
 #include "entity.h"
 #include <iostream>
+#include <math.h>
 
-double yomamaSpawnChance = 0.05;
+double yomamaSpawnChance = 0.5;
+int ratRandomnessLevel=25;
 
 
 
@@ -369,8 +371,12 @@ void Grid::updateYoMama(){
     }
 }
 
+bool Grid::inBounds(int y,int x){
+    return x>=0 && x<width && y>=0 && y<height;
+}
+
 bool Grid::canEntityMoveTo(int y,int x){
-    if(!(x>=0 && x<width && y>=0 && y<height)) return false;
+    if(!inBounds(y,x)) return false;
     return grid[y][x]!=1 && grid[y][x]!=4 ;
 }
 
@@ -453,7 +459,7 @@ void Grid::updateHarolds(){
 
     std::random_device rd;                     
     std::mt19937 gen(rd());                     
-    std::uniform_int_distribution<> dist(0, 18);
+    std::uniform_int_distribution<> dist(0, ratRandomnessLevel);
 
     for(Entity& harold:harolds){
         switch (dist(gen))
@@ -461,6 +467,7 @@ void Grid::updateHarolds(){
             //losowy ruch
         case 1:
             if(canEntityMoveTo(harold.getY(),harold.getX()+1)) harold.move(KEY_RIGHT);
+            else burrow(&harold,KEY_RIGHT);
             break;
         case 2:
             if(canEntityMoveTo(harold.getY(),harold.getX()-1)) harold.move(KEY_LEFT);
@@ -468,11 +475,35 @@ void Grid::updateHarolds(){
             break;
         case 3:
             if(canEntityMoveTo(harold.getY()+1,harold.getX())) harold.move(KEY_DOWN);
+            else burrow(&harold,KEY_DOWN);
             break;
         case 4:
             if(canEntityMoveTo(harold.getY()-1,harold.getX())) harold.move(KEY_UP);
+            else burrow(&harold,KEY_UP);
             break;
-        
+        case 5:{//ruch w strone gracza
+            int dx = player.getX()-harold.getX();
+            int dy = player.getY()-harold.getY();
+
+            if(abs(dx)>abs(dy)){//ruch poziomy
+                if(dx>0){
+                    if(canEntityMoveTo(harold.getY(),harold.getX()+1)) harold.move(KEY_RIGHT);
+                    else burrow(&harold,KEY_RIGHT);
+                }else{
+                    if(canEntityMoveTo(harold.getY(),harold.getX()-1)) harold.move(KEY_LEFT);
+                    else burrow(&harold,KEY_LEFT);
+                }
+            }else{
+                if(dy>0){
+                    if(canEntityMoveTo(harold.getY()+1,harold.getX())) harold.move(KEY_DOWN);
+                    else burrow(&harold,KEY_DOWN);
+                }else{
+                    if(canEntityMoveTo(harold.getY()-1,harold.getX())) harold.move(KEY_UP);
+                    else burrow(&harold,KEY_UP);
+                }
+            }
+            break;
+            }
         default:
             break;
         }
@@ -482,14 +513,39 @@ void Grid::updateHarolds(){
 }
 
 void Grid::burrow(Entity* e,int dir){
+    int xdir,ydir;
     switch (dir)
     {
     case KEY_LEFT:
-        /* code */
+        xdir=-1;
+        ydir=0;
         break;
-    
+    case KEY_RIGHT:
+        xdir=1;
+        ydir=0;
+        break;
+    case KEY_UP:
+        xdir=0;
+        ydir=-1;
+        break;
+    case KEY_DOWN:
+        xdir=0;
+        ydir=1;
+        break;                    
     default:
         break;
     }
+
+
+    int x = e->getX();
+    int y  = e->getY();
+
+    do
+    {
+        x+=xdir;
+        y+=ydir;
+    } while (inBounds(y,x) && (grid[y][x]==1 || grid[y][x]));
+
+    if(inBounds(y,x)) e->setPos(x,y);   
 
 }
