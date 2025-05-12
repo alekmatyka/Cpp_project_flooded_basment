@@ -399,7 +399,7 @@ bool Grid::canEntityMoveTo(int y,int x){
 void Grid::spawnSupportingColumns(){
     std::random_device rd;                     
     std::mt19937 gen(rd());                     
-    std::uniform_int_distribution<> dist((int)difficulty, 5+(int)difficulty);
+    std::uniform_int_distribution<> dist((int)difficulty*2, 5+(int)difficulty*2);
     std::uniform_int_distribution<> hdist(height/2-4,height/2+4);
     std::uniform_int_distribution<> wdist(width/2-5,width/2+5);
 
@@ -475,7 +475,7 @@ void Grid::updateHarolds(){
 
     std::random_device rd;                     
     std::mt19937 gen(rd());                     
-    std::uniform_int_distribution<> dist(0, ratRandomnessLevel);
+    std::uniform_int_distribution<> dist(0, (int)(ratRandomnessLevel/difficulty));
 
     for(Entity& harold:harolds){
         switch (dist(gen))
