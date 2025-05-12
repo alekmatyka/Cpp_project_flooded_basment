@@ -7,7 +7,7 @@
 
 double yomamaSpawnChance = 0.5;
 int ratRandomnessLevel=25;
-
+int turntableCost=2;
 
 
 Grid::Grid(int h, int w,double diff):height(h),width(w),difficulty(diff),player(0,0,YELLOW){
@@ -185,11 +185,27 @@ void Grid::Update(){
     case KEY_E:
         // updateEntites();
         flipClockwise();
+        for(int i=0;i<turntableCost;i++){
+            turn++;
+            if(turn%waterCycleLength==0)
+            {
+                updateWater();
+                updateDrains();
+            } 
+        }
         // entityUpdate = false;
         break;    
     case KEY_Q:
         // updateEntites();
         flipCounterClockwise();
+        for(int i=0;i<turntableCost;i++){
+            turn++;
+            if(turn%waterCycleLength==0)
+            {
+                updateWater();
+                updateDrains();
+            } 
+        }
         // entityUpdate = false;
         break;
     default:
