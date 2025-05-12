@@ -51,7 +51,7 @@ void Game::Update_game_screen(){
         break;
     case GAME_LOST:
         current_screen=GAMEOVER_SCREEN;
-        current_level=0;
+        // current_level=0;
         break;
     default:
         break;

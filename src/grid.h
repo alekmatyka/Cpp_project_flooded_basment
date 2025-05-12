@@ -43,6 +43,7 @@ private:
     int YoMamaDirection = 1;
 
     std::vector<Drain> drains;
+    std::vector<Entity> harolds;
 
     void calculateStartPosition();
     void DrawGrid();
@@ -55,11 +56,16 @@ private:
     void spawnYoMama();
     void spawnSupportingColumns();
     void spawnDrains();
+    void spawnHarolds();
 
     void updateEntites();
     void updateWater();
     void updateYoMama();
     void updateDrains();
+    void updateHarolds();
+
+    void burrow(Entity* e,int dir);
+
 
     bool checkPlayerCollison();
     bool canEntityMoveTo(int x, int y);

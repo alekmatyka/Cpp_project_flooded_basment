@@ -4,6 +4,8 @@
 #include "entity.h"
 #include <iostream>
 
+double yomamaSpawnChance = 0.05;
+
 
 
 Grid::Grid(int h, int w,double diff):height(h),width(w),difficulty(diff),player(0,0,YELLOW){
@@ -51,6 +53,8 @@ Grid::Grid(int h, int w,double diff):height(h),width(w),difficulty(diff),player(
     spawnSupportingColumns();
     //spawn studzienek
     spawnDrains();
+    //spawn szczurow
+    spawnHarolds();
 
 }
 
@@ -123,6 +127,7 @@ void Grid::Draw(){
     DrawGrid();
     for(Drain& d:drains) d.Draw(cell_width,startX,startY);
     player.Draw(cell_width,startX,startY);
+    for(Entity& harold:harolds) harold.Draw(cell_width,startX,startY);
     if(YoMamaActive)
         YoMamaYoMama->Draw(cell_width,startX,startY);
     DrawRectangleLinesEx(outline,outline_width, RED);
@@ -176,14 +181,14 @@ void Grid::Update(){
         entityUpdate = false;
         break;
     case KEY_E:
-        updateEntites();
+        // updateEntites();
         flipClockwise();
-        entityUpdate = false;
+        // entityUpdate = false;
         break;    
     case KEY_Q:
-        updateEntites();
+        // updateEntites();
         flipCounterClockwise();
-        entityUpdate = false;
+        // entityUpdate = false;
         break;
     default:
         entityUpdate = false;
@@ -213,6 +218,8 @@ void Grid::flipClockwise(){
 
     //przesuniecie entities
     flipEntity(&player,true);
+
+    for(Entity& harold:harolds) flipEntity(&harold,true);
 }
 
 void Grid::flipCounterClockwise(){
@@ -230,6 +237,7 @@ void Grid::flipCounterClockwise(){
 
     //przesuniecie entities
     flipEntity(&player,false);
+    for(Entity& harold:harolds) flipEntity(&harold,false);
 }
 
 void Grid::flipEntity(Entity* e,bool clockwise){
@@ -281,7 +289,10 @@ void Grid::spawnWater(){
 
 bool Grid::checkPlayerCollison(){
     if(grid[player.getY()][player.getX()]==2) return true;
-    if(player.getX()==YoMamaYoMama->getX() && player.getY()==YoMamaYoMama->getY()) return true; 
+    if(YoMamaActive)
+        if(player.getX()==YoMamaYoMama->getX() && player.getY()==YoMamaYoMama->getY()) return true;
+    for(Entity harold:harolds) 
+        if(player.getX()==harold.getX() && player.getY()==harold.getY())  return true;
 
     return false;
 }
@@ -298,6 +309,7 @@ void Grid::updateEntites(){
         
     if(YoMamaActive)
         updateYoMama();
+    updateHarolds();
 
 }
 
@@ -325,9 +337,9 @@ void Grid::spawnYoMama(){
     std::random_device rd;                     
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> rdist(0,1);
-    if (rdist(gen)<1.05*difficulty){
+    if (rdist(gen)<yomamaSpawnChance*difficulty){
         YoMamaActive=true;
-        std::cout<<"Yomama is here!\n";
+        // std::cout<<"Yomama is here!\n";
         if(rdist(gen)<0.5){//pionowo
             std::uniform_int_distribution<> dist(1,width-2);
             YoMamaVertical=true;
@@ -358,7 +370,8 @@ void Grid::updateYoMama(){
 }
 
 bool Grid::canEntityMoveTo(int y,int x){
-    return grid[y][x]!=1 && grid[y][x]!=4 && x>=0 && x<width && y>=0 && y<height;
+    if(!(x>=0 && x<width && y>=0 && y<height)) return false;
+    return grid[y][x]!=1 && grid[y][x]!=4 ;
 }
 
 void Grid::spawnSupportingColumns(){
@@ -411,4 +424,72 @@ void Grid::updateDrains(){
             }
         }
     }
+}
+
+void Grid::spawnHarolds(){
+    std::random_device rd;                     
+    std::mt19937 gen(rd());                     
+    std::uniform_int_distribution<> dist(0, 3);
+    std::uniform_int_distribution<> distX(0, width-1);
+    std::uniform_int_distribution<> distY(0, height-1);
+
+    int haroldCount = dist(gen);
+
+    while(haroldCount>0){
+        int ratX,ratY;
+        do
+        {
+            ratX=distX(gen);
+            ratY=distY(gen);
+        } while (!(canEntityMoveTo(ratY,ratX) && (ratX!=0 || ratY!=0) && (ratX!=width-1 || ratY!=height-1)));
+        Entity harold(ratX,ratY,RED);
+        harolds.push_back(harold);
+        haroldCount--;
+    }
+}
+
+
+void Grid::updateHarolds(){
+
+    std::random_device rd;                     
+    std::mt19937 gen(rd());                     
+    std::uniform_int_distribution<> dist(0, 18);
+
+    for(Entity& harold:harolds){
+        switch (dist(gen))
+        {
+            //losowy ruch
+        case 1:
+            if(canEntityMoveTo(harold.getY(),harold.getX()+1)) harold.move(KEY_RIGHT);
+            break;
+        case 2:
+            if(canEntityMoveTo(harold.getY(),harold.getX()-1)) harold.move(KEY_LEFT);
+            else burrow(&harold,KEY_LEFT);
+            break;
+        case 3:
+            if(canEntityMoveTo(harold.getY()+1,harold.getX())) harold.move(KEY_DOWN);
+            break;
+        case 4:
+            if(canEntityMoveTo(harold.getY()-1,harold.getX())) harold.move(KEY_UP);
+            break;
+        
+        default:
+            break;
+        }
+
+    }
+
+}
+
+void Grid::burrow(Entity* e,int dir){
+    switch (dir)
+    {
+    case KEY_LEFT:
+        /* code */
+        break;
+    
+    default:
+        break;
+    }
+
 }
