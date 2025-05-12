@@ -94,7 +94,7 @@ void Game::Draw_game_screen(){
 
 }
 void Game::Draw_home_screen(){
-    ClearBackground(GREEN);
+    ClearBackground(LIGHTGRAY);
     DrawText("Menu",10,10,20,BLACK);
     GuiSetStyle(DEFAULT, TEXT_SIZE, 96);
     GuiLabel((Rectangle){ 240, 50, 960, 100 }, "Zalana Piwnica!");
