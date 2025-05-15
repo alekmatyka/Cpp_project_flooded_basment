@@ -17,7 +17,7 @@ The **player** is represented by the yellow square, and is moved by the arrow ke
 ## Turntable
 ![turntable](./example_images/turntable.png)
 
-The red 3x3 outline is the **turntable**. It can be moved using the WASD keys. Its purpose is tuning the labirynth around. By using the Q and E keys, the turntable will flip all allowed tiles and entities inside the outline around by 90 degrees, respectively counterclockwise/clockwise.
+The red 3x3 outline is the **turntable**. It can be moved using the WASD keys. Its purpose is turning the labirynth around. By using the Q and E keys, the turntable will flip all allowed tiles and entities inside the outline around by 90 degrees, respectively counterclockwise/clockwise.
 
 ### When game gets harder, the turntable will be on a cooldown!
 
@@ -67,7 +67,7 @@ Every turn, he has a chance to move, and in it:
 - 80% chance to move in one of the cardinal directions
 - 20% chance to move towards the player, in a cardinal direction
 
-If Harold encounters a wall upon moving, he can dig and burrow under the walls to the closest avaliable no-wall tile in that direction.
+If Harold encounters a wall upon moving, he can dig and burrow under the walls to the closest avaliable non-wall tile in that direction.
 
 # How to run the game
 The game is prepared fo usage/editing in the VSCode, I have no idea how to exactly run it in any other editor.
