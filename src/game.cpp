@@ -40,7 +40,7 @@ void Game::Loop(){
 }
 
 void Game::Update_game_screen(){
-    if(IsKeyPressed(KEY_SPACE)) current_screen=GAMEOVER_SCREEN;
+    if(IsKeyPressed(KEY_BACKSPACE)) current_screen=GAMEOVER_SCREEN;
     grid->Update();
     switch (grid->getGameStatus())
     {
@@ -116,7 +116,7 @@ void Game::startNewGrid(){
     std::uniform_int_distribution<> distw(15, 35);
     int h = disth(gen);
     int w = distw(gen);
-    double diff = difficulty_level + (double)current_level/10;
+    double diff = (double)difficulty_level + (double)current_level/(10/difficulty_level);
     diff = std::min(diff,4.0);
     // std::cout<<"hallo "<<diff<<" "<<(double)current_level/10<<'\n';
     delete grid;

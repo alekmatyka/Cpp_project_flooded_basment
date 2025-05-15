@@ -13,6 +13,8 @@ The **player** is represented by the yellow square, and is moved by the arrow ke
 ## Turntable
 The red 3x3 outline is the **turntable**. It can be moved using the WASD keys. Its purpose is tuning the labirynth around. By using the Q and E keys, the turntable will flip all allowed tiles and entities inside the outline around by 90 degrees, respectively counterclockwise/clockwise.
 
+### When game gets harder, the turntable will be on a cooldown!
+
 ### Moving the player and turning the turntable will cause the entities to update, no matter if the move is succesful or not!
 
 ## Infrastructre
@@ -29,7 +31,7 @@ These are the **load-bearing columns**. The turntable cannot be turned if there 
 ### Gray circles
 These are the water **drains**. When covered by water, upon the water update, it drains *all* water from surrounding tiles in the 5x5 square around the drain.
 
-## What will kil you
+## What will kill you
 
 ### Water
 The blue tiles inside the labirynth represent the titular *flooding* in the basement. After a number of player moves, indicated by the white progress bar above the labirynth, it spreads to all empty tiles in the cardinal directions.
@@ -43,9 +45,8 @@ Only one can spawn per labirynth.
 
 Rumored to be a failed test subject from the SCP-3008, Harold is the square-shaped red rodent.
 Every turn, he has a chance to move: 
-- 16% chance to move in one of the cardinal directions
-- 4% chance to move towards the player, in a cardinal direction
-- 80% chance to do nothing
+- 80% chance to move in one of the cardinal directions
+- 20% chance to move towards the player, in a cardinal direction
 
 If Harold encounters a wall upon moving, he can dig and burrow under the walls to the closest avaliable no-wall tile in that direction.
 
