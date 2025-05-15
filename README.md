@@ -74,6 +74,8 @@ The game is prepared fo usage/editing in the VSCode, I have no idea how to exact
 
 Credits to educ8s for the [raylib VSCode template](https://github.com/educ8s/Raylib-CPP-Starter-Template-for-VSCODE-V2).
 
+ComicMono font by [dtinth](https://dtinth.github.io/comic-mono-font/)
+
 1. Make sure to have [raylib](https://www.raylib.com/index.html) and [raygui](https://www.youtube.com/watch?v=c7FAQYImXMk&list=LL&index=2) properly installed.
 
 2. Open the project folder in VSCode.
