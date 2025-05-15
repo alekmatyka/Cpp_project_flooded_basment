@@ -41,6 +41,10 @@ void Game::Loop(){
 
 void Game::Update_game_screen(){
     if(IsKeyPressed(KEY_BACKSPACE)) current_screen=GAMEOVER_SCREEN;
+    if(GuiButton((Rectangle){ (float)GetScreenWidth()-300.0f, 50, 2*120, 100 }, "Powrot do Menu")){
+        current_level=0;
+        current_screen = HOME_SCREEN;
+    }
     grid->Update();
     switch (grid->getGameStatus())
     {
@@ -91,6 +95,7 @@ void Game::Draw_game_screen(){
     GuiSetStyle(DEFAULT, TEXT_SIZE, 48);
     GuiLabel((Rectangle){ 600-120, 100, 400, 100 }, score.c_str());
     GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
+
 
 }
 void Game::Draw_home_screen(){
