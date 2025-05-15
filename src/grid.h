@@ -32,9 +32,12 @@ private:
     GameStatus status = GAME_RUNNING;
     int turn = 0;
     int waterCycleLength;
+    int turntableCooldownLength=2;
+    int turntableCooldown=2;
     
     Rectangle outline;
     Rectangle waterCycleOutline;
+    Rectangle cooldownOutline;
     Entity player;
 
     Entity* YoMamaYoMama;

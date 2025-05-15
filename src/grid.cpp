@@ -8,11 +8,12 @@
 double yomamaSpawnChance = 0.5;
 int ratRandomnessLevel=25;
 int turntableCost=2;
-
+double turntableCooldownLevel=2;
+int waterCycleLengthBuffer = 8;
 
 Grid::Grid(int h, int w,double diff):height(h),width(w),difficulty(diff),player(0,0,YELLOW){
     calculateStartPosition();
-    waterCycleLength = (int) (h+w)/diff;
+    waterCycleLength = (int) waterCycleLengthBuffer+ (h+w)/diff;
     grid = new int*[height];
     for(int i = 0; i<height;i++){
         grid[i] = new int[width]();
@@ -46,6 +47,12 @@ Grid::Grid(int h, int w,double diff):height(h),width(w),difficulty(diff),player(
     waterCycleOutline.y = std::max(startY-cell_width*2,GetScreenHeight()/4);
     waterCycleOutline.width = cell_width*width;
     waterCycleOutline.height = cell_width;
+    if(difficulty>=2) turntableCost=1;
+
+    cooldownOutline.y = startY;
+    cooldownOutline.x = startX-2*cell_width;
+    cooldownOutline.height = cell_width*height;
+    cooldownOutline.width = cell_width;
 
     //spawn wody
     spawnWater();
@@ -137,8 +144,16 @@ void Grid::Draw(){
     //prgressbar cyklu wody
     int waterLength = (int) (turn%waterCycleLength)*width*cell_width/waterCycleLength;
     DrawRectangle(waterCycleOutline.x,waterCycleOutline.y,waterLength,cell_width,WHITE);
-
     DrawRectangleLinesEx(waterCycleOutline,outline_width,BLACK);
+
+    int cooldownBarLength = (int) (turntableCooldown*height*cell_width/turntableCooldownLength);
+    Color cooldownBarColor = turntableCooldown==turntableCooldownLength ? GREEN : WHITE;
+    if(difficulty>=turntableCooldownLevel){
+        DrawRectangle(cooldownOutline.x,cooldownOutline.y,cell_width,cooldownBarLength,cooldownBarColor);
+        DrawRectangleLinesEx(cooldownOutline,outline_width,BLACK);
+    }
+
+
 
 }
 
@@ -184,6 +199,14 @@ void Grid::Update(){
         break;
     case KEY_E:
         // updateEntites();
+        if(difficulty>=turntableCooldownLevel){//czy uzywamy cooldownu
+            if(turntableCooldown==turntableCooldownLength){//czy cooldown wypelniony
+                turntableCooldown=0;//uzywamy ruchu, zerujemy
+            }else{
+                entityUpdate=false;//nie robimy nic
+                break;
+            }
+        }
         flipClockwise();
         for(int i=0;i<turntableCost;i++){
             turn++;
@@ -197,6 +220,14 @@ void Grid::Update(){
         break;    
     case KEY_Q:
         // updateEntites();
+        if(difficulty>=turntableCooldownLevel){//czy uzywamy cooldownu
+            if(turntableCooldown==turntableCooldownLength){//czy cooldown wypelniony
+                turntableCooldown=0;//uzywamy ruchu, zerujemy
+            }else{
+                entityUpdate=false;//nie robimy nic
+                break;
+            }
+        }
         flipCounterClockwise();
         for(int i=0;i<turntableCost;i++){
             turn++;
@@ -318,6 +349,8 @@ bool Grid::checkPlayerCollison(){
 
 void Grid::updateEntites(){
     turn++;
+    //update cooldown
+    if(turntableCooldown<turntableCooldownLength) turntableCooldown++;
     //update wody
     if(turn%waterCycleLength==0)
     {
@@ -328,6 +361,7 @@ void Grid::updateEntites(){
     if(YoMamaActive)
         updateYoMama();
     updateHarolds();
+
 
 }
 
